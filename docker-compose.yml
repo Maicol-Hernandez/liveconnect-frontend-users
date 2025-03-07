@@ -1,0 +1,12 @@
+services:
+  angular-app:
+    build: .
+    container_name: angular-app
+    ports:
+      - "4200:4200"
+    volumes:
+        # Monta el directorio actual en /app dentro del contenedor
+        - .:/app
+        # Evita que se sobreescriba la carpeta node_modules del contenedor
+        - /app/node_modules
+
