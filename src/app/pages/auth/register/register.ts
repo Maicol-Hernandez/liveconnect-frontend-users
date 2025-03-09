@@ -12,6 +12,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { MultiSelectModule } from 'primeng/multiselect'
+import { ToastModule } from 'primeng/toast';
 import { InputIcon } from 'primeng/inputicon';
 import { IconField } from 'primeng/iconfield';
 import { AutoFocusModule } from 'primeng/autofocus';
@@ -33,6 +34,7 @@ import { MessageService } from 'primeng/api';
     InputTextModule,
     PasswordModule,
     MultiSelectModule,
+    ToastModule,
     InputIcon,
     IconField,
     AutoFocusModule,
@@ -95,8 +97,8 @@ export class Register implements OnInit {
     if (this.registerForm.invalid) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Formulario incompleto',
-        detail: 'Por favor, complete todos los campos correctamente'
+        summary: 'Form incomplete',
+        detail: 'Please, complete all fields correctly'
       });
       return;
     }
@@ -115,8 +117,8 @@ export class Register implements OnInit {
       next: () => {
         this.messageService.add({
           severity: 'success',
-          summary: 'Registro exitoso',
-          detail: '¡Bienvenido! Redirigiendo...'
+          summary: 'Registration successful',
+          detail: 'Welcome! Redirecting...'
         });
         setTimeout(() => this.router.navigate(['/auth/login']), 2000);
       },
@@ -125,8 +127,8 @@ export class Register implements OnInit {
         this.isSubmitting = false;
         this.messageService.add({
           severity: 'error',
-          summary: 'Error de registro',
-          detail: this.errorMessage || 'Error desconocido'
+          summary: 'Registration error',
+          detail: this.errorMessage || 'Unknown error'
         });
       },
       complete: () => this.isSubmitting = false

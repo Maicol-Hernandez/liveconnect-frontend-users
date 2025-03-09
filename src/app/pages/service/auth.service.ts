@@ -23,13 +23,13 @@ export class AuthService {
   register(userData: User): Observable<any> {
     return this.http.post(this.apiUrl, userData).pipe(
       catchError(error => {
-        let errorMsg = 'Error desconocido';
+        let errorMsg = 'Unknown error';
         if (error.error instanceof ErrorEvent) {
           errorMsg = `Error: ${error.error.message}`;
         } else if (error.status === 422) {
-          errorMsg = 'Error de validación: ' + JSON.stringify(error.error.errors);
+          errorMsg = 'Validation error: ' + JSON.stringify(error.error.message);
         } else {
-          errorMsg = `Código de error: ${error.status}\nMensaje: ${error.message}`;
+          errorMsg = `Error code: ${error.status}\nMessage: ${error.message}`;
         }
         return throwError(() => new Error(errorMsg));
       })
