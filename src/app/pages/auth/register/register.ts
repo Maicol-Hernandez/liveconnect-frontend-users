@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { AuthService } from '../../service/auth.service';
-import { MultiSelectPets } from '../components/MultiSelectPets';
+import { PetService, Pet } from '../../service/pet.service';
 
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -28,7 +28,6 @@ import { MessageService } from 'primeng/api';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    MultiSelectPets,
     ButtonModule,
     FloatLabelModule,
     InputTextModule,
@@ -47,9 +46,11 @@ export class Register implements OnInit {
   registerForm!: FormGroup;
   isSubmitting = false;
   errorMessage: string | null = null;
+  dataPets!: Pet[];
 
   constructor(
     private authService: AuthService,
+    private petService: PetService,
     private messageService: MessageService,
     private router: Router,
     private fb: FormBuilder
@@ -57,6 +58,7 @@ export class Register implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    this.loadPets();
   }
 
   initForm(): void {
@@ -76,6 +78,12 @@ export class Register implements OnInit {
         const confirmPassword = group.get('confirmPassword')?.value;
         return password === confirmPassword ? null : { passwordMismatch: true };
       }
+    });
+  }
+
+  loadPets(): void {
+    this.petService.getPets().subscribe(({ data }: { data: Pet[] }) => {
+      this.dataPets = data;
     });
   }
 
@@ -102,7 +110,7 @@ export class Register implements OnInit {
       email: formValues.email,
       password: formValues.password,
       password_confirm: formValues.confirmPassword,
-      pets: formValues.pets
+      pets: formValues.pets.map((pet: Pet) => pet.id)
     }).subscribe({
       next: () => {
         this.messageService.add({
@@ -110,7 +118,7 @@ export class Register implements OnInit {
           summary: 'Registro exitoso',
           detail: '¡Bienvenido! Redirigiendo...'
         });
-        setTimeout(() => this.router.navigate(['/']), 2000);
+        setTimeout(() => this.router.navigate(['/auth/login']), 2000);
       },
       error: (error) => {
         this.errorMessage = error.message;
@@ -139,5 +147,9 @@ export class Register implements OnInit {
 
   get confirmPassword() {
     return this.registerForm.get('confirmPassword');
+  }
+
+  get pets() {
+    return this.registerForm.get('pets');
   }
 }

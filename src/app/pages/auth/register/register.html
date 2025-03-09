@@ -76,7 +76,8 @@
           <div class="mb-8">
             <p-float-label variant="on" class="w-full">
               <p-password formControlName="confirmPassword" [toggleMask]="true" [feedback]="false"
-                inputStyleClass="w-full md:w-[30rem] !p-4 !rounded-2xl" autocomplete>
+                inputStyleClass="w-full md:w-[30rem] !p-4 !rounded-2xl" autocomplete
+                [ngClass]="{'ng-invalid ng-dirty': confirmPassword?.invalid && confirmPassword?.touched}">
               </p-password>
               <label for="password">Confirm Password</label>
             </p-float-label>
@@ -95,10 +96,45 @@
 
           <!-- <div class="w-full mb-8">
             <multi-select-pets />
+
+            <div class="w-full md:w-[30rem] mt-2">
+              <p-message
+                *ngIf="(confirmPassword?.invalid && confirmPassword?.touched) || (registerForm.hasError('passwordMismatch') && confirmPassword?.touched)"
+                severity="error" variant="simple" styleClass="w-full">
+                <div class="w-full break-words">
+                  {{ confirmPassword?.errors?.['required'] ? 'Confirmación de contraseña es obligatoria' :
+                   registerForm.hasError('passwordMismatch') ? 'Las contraseñas no coinciden' : '' }}
+                </div>
+              </p-message>
+            </div>
           </div> -->
 
+
+          <div class="w-full mb-8">
+            <p-multiselect [options]="dataPets" formControlName="pets" placeholder="Select Pets" optionLabel="name"
+              styleClass="w-full !p-2 !rounded-2xl" display="chip"
+              [ngClass]="{'ng-invalid ng-dirty': pets?.invalid && pets?.touched}">
+              <ng-template let-pet #item>
+                <div class="flex items-center gap-2">
+                  <div>{{ pet.name }}</div>
+                </div>
+              </ng-template>
+              <ng-template #dropdownicon>
+                <i class="pi pi-chevron-down"></i>
+              </ng-template>
+            </p-multiselect>
+            <div class="w-full md:w-[30rem] mt-2">
+              <p-message *ngIf="pets?.invalid && pets?.touched" severity="error" variant="simple" styleClass="w-full">
+                <div class="w-full break-words">
+                  Debe seleccionar al menos una mascota
+                </div>
+              </p-message>
+            </div>
+          </div>
+
           <!-- Submit button -->
-          <p-button label="Sign Up" styleClass="w-full" type="submit" [loading]="isSubmitting"></p-button>
+          <p-button label="Sign Up" styleClass="w-full" type="submit" [disabled]="registerForm.invalid"
+            [loading]="isSubmitting"></p-button>
         </form>
       </div>
     </div>
