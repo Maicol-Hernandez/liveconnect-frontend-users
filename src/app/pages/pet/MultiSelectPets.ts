@@ -12,7 +12,7 @@ import { ButtonModule } from 'primeng/button';
     ButtonModule
   ],
   template: `
-    <p-multiselect [options]="pets" [(ngModel)]="selectedPets" placeholder="Select Countries" optionLabel="name" styleClass="w-full !p-2 !rounded-2xl" display="chip">
+    <p-multiselect [options]="pets" [(ngModel)]="selectedPets" placeholder="Select Pets" optionLabel="name" styleClass="w-full !p-2 !rounded-2xl" display="chip">
         <ng-template let-pet #item>
             <div class="flex items-center gap-2">
                 <div>{{ pet.name }}</div>
