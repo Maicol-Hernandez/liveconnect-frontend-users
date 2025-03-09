@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { AuthService } from '../../service/auth.service';
 import { PetService, Pet } from '../../service/pet.service';
@@ -88,8 +87,6 @@ export class Register implements OnInit {
       this.dataPets = data;
     });
   }
-
-  get f() { return this.registerForm.controls; }
 
   onSubmit(): void {
     this.registerForm.markAllAsTouched();
