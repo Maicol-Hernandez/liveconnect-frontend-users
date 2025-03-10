@@ -86,19 +86,6 @@
     <form [formGroup]="userForm">
       <div class="flex flex-col gap-6 p-4">
 
-        <!-- Name Field -->
-        <!-- <div class="field">
-          <label for="name" class="block font-medium mb-2">Name</label>
-          <input pInputText id="name" formControlName="name"
-            [class]="{ 'ng-invalid': userForm.get('name')?.invalid && submitted }" />
-          <small *ngIf="userForm.get('name')?.hasError('required') && submitted" class="p-error block mt-1">
-            Name is required
-          </small>
-          <small *ngIf="userForm.get('name')?.hasError('minlength') && submitted" class="p-error block mt-1">
-            Minimum 3 characters required
-          </small>
-        </div> -->
-
         <!-- Username field-->
         <div class="mb-4">
           <p-icon-field>
@@ -146,23 +133,6 @@
             </p-message>
           </div>
         </div>
-
-        <!-- Pets Field -->
-        <!-- <div class="field">
-          <label for="pets" class="block font-medium mb-2">Pets</label>
-          <p-multiSelect id="pets" formControlName="pets" [options]="dataPets" optionLabel="name" optionValue="id"
-            placeholder="Select Pets" [showToggleAll]="false"
-            [class]="{ 'ng-invalid': userForm.get('pets')?.invalid && submitted }">
-            <ng-template let-pet #item>
-              <div class="flex items-center gap-2">
-                <span>{{ pet.name }}</span>
-              </div>
-            </ng-template>
-          </p-multiSelect>
-          <small *ngIf="userForm.get('pets')?.hasError('required') && submitted" class="p-error block mt-1">
-            At least one pet is required
-          </small>
-        </div> -->
 
       </div>
     </form>
