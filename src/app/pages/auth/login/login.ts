@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { take } from 'rxjs';
 
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -45,13 +46,16 @@ import { AuthService } from '../../service/auth.service';
 })
 export class Login implements OnInit {
   loginForm!: FormGroup
-  isSubmitting = false
-  errorMessage: string | null = null
+  loading = false;
+  submitted = false;
+  error: string | null = null;
+  returnUrl: string = '/';
 
   constructor(
     private authService: AuthService,
     private messageService: MessageService,
     private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder
   ) { }
 
@@ -66,9 +70,18 @@ export class Login implements OnInit {
         Validators.required,
         Validators.minLength(8),
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
-      ]],
-      remember: [false]
-    })
+      ]]
+    });
+
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
+    this.authService.isAuthenticated$.pipe(
+      take(1)
+    ).subscribe(isAuth => {
+      if (isAuth) {
+        this.router.navigate(['/']);
+      }
+    });
   }
 
   onSubmit(): void {
@@ -83,8 +96,8 @@ export class Login implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
-    this.errorMessage = null;
+    this.loading = true;
+    this.error = null;
     const formValues = this.loginForm.value;
 
     this.authService.login({
@@ -100,15 +113,15 @@ export class Login implements OnInit {
         setTimeout(() => this.router.navigate(['/']), 1000);
       },
       error: (error) => {
-        this.errorMessage = error.message;
-        this.isSubmitting = false;
+        this.error = error;
+        this.loading = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Login error',
-          detail: this.errorMessage || 'Unknown error'
+          detail: this.error || 'Unknown error'
         })
       },
-      complete: () => this.isSubmitting = false
+      complete: () => this.loading = false
     })
   }
 

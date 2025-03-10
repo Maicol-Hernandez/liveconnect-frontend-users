@@ -198,7 +198,7 @@ export class AuthService {
           errorMessage = 'Validation error in the submitted data';
         }
       } else {
-        errorMessage = `Error code: ${error.status}\nMessage: ${error.message}`;
+        errorMessage = `Error code: ${error.status}\nMessage: ${error.error.error}`;
       }
     }
 
