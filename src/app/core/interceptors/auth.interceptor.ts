@@ -1,13 +1,15 @@
-// auth.interceptor.ts
-import { HttpInterceptorFn, HttpHandlerFn, HttpRequest, HttpEvent } from '@angular/common/http';
+import { HttpInterceptorFn, HttpHandlerFn, HttpRequest, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { AuthService } from '../../pages/service/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
+  const router = inject(Router);
   const authService = inject(AuthService);
   const token = authService.getToken();
 
@@ -19,5 +21,17 @@ export const authInterceptor: HttpInterceptorFn = (
     });
   }
 
-  return next(req);
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 401) {
+        // Token is invalid or expired
+        authService.logout().subscribe(() => {
+          router.navigate(['/auth/login'], {
+            queryParams: { returnUrl: router.url }
+          });
+        });
+      }
+      return throwError(() => error);
+    })
+  );
 };
