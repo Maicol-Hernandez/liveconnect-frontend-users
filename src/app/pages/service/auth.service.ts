@@ -80,11 +80,17 @@ export class AuthService {
   /**
    * Log in a user with email and password
    * @param credentials Login credentials
+   * @param returnUrl Optional URL to redirect after successful login
    * @returns Observable with the login response
    */
-  login(credentials: Login): Observable<AuthResponse> {
+  login(credentials: Login, returnUrl?: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => this.handleAuthentication(response)),
+      tap(() => {
+        // Redirect to the previous URL or the home page
+        const url = returnUrl || '/';
+        this.router.navigateByUrl(url);
+      }),
       catchError(this.handleError)
     );
   }
