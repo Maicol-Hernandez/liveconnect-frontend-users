@@ -26,6 +26,7 @@ import { CrudUserService } from '../../service/crud.user.service'
 import { PetService } from '../../service/pet.service';
 import { User } from '@shared/models/user.model';
 import { Pet } from '@shared/models/pet.model';
+import { PetsFormatterPipe } from '@shared/pipes/pets-formatter.pipe';
 
 interface Column {
   field: string;
@@ -61,7 +62,8 @@ interface ExportColumn {
     MultiSelectModule,
     IconFieldModule,
     ConfirmDialogModule,
-    Message
+    Message,
+    PetsFormatterPipe
   ],
   providers: [ConfirmationService, MessageService, CrudUserService]
 })
