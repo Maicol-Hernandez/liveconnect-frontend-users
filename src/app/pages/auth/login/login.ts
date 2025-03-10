@@ -85,6 +85,7 @@ export class Login implements OnInit {
   }
 
   onSubmit(): void {
+    this.submitted = true;
     this.loginForm.markAllAsTouched();
 
     if (this.loginForm.invalid) {
