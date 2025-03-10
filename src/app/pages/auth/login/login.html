@@ -11,6 +11,8 @@
 
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
+          <p-toast></p-toast>
+
           <!-- Email field -->
           <div class="mb-8">
             <p-icon-field>
@@ -57,7 +59,8 @@
           </div>
 
           <!-- Submit button -->
-          <p-button label="Sign In" styleClass="w-full" routerLink="/"></p-button>
+          <p-button label="Sign In" styleClass="w-full" type="submit" [disabled]="loginForm.invalid"
+            [loading]="isSubmitting"></p-button>
 
           <div class="text-center mt-4">
             <span class="text-muted-color font-medium">Don't have an account?</span>

@@ -12,6 +12,7 @@ export interface User {
   password?: string;
   password_confirm?: string;
   pets?: string[];
+  token?: string;
   updated_at?: string;
 }
 
@@ -21,9 +22,8 @@ export interface Login {
 }
 
 export interface AuthResponse {
-  user: User;
-  token: string;
-  message: string;
+  data: User;
+  status: string;
 }
 
 @Injectable({
@@ -156,13 +156,13 @@ export class AuthService {
    * @param response Authentication response
    */
   private handleAuthentication(response: AuthResponse): void {
-    if (response && response.token) {
+    if (response && response.data.token) {
       // Store token and user data
-      localStorage.setItem(this.tokenKey, response.token);
-      localStorage.setItem(this.userKey, JSON.stringify(response.user));
+      localStorage.setItem(this.tokenKey, response.data.token);
+      localStorage.setItem(this.userKey, JSON.stringify(response.data));
 
       // Update subjects
-      this.currentUserSubject.next(response.user);
+      this.currentUserSubject.next(response.data);
       this.isAuthenticatedSubject.next(true);
     }
   }

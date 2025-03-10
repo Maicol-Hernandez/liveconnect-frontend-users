@@ -117,7 +117,7 @@ export class Register implements OnInit {
           summary: 'Registration successful',
           detail: 'Welcome! Redirecting...'
         });
-        setTimeout(() => this.router.navigate(['/auth/login']), 1000);
+        setTimeout(() => this.router.navigate(['/']), 1000);
       },
       error: (error) => {
         this.errorMessage = error.message;

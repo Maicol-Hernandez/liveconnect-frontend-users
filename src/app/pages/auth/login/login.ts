@@ -72,6 +72,44 @@ export class Login implements OnInit {
   }
 
   onSubmit(): void {
+    this.loginForm.markAllAsTouched();
+
+    if (this.loginForm.invalid) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Form incomplete',
+        detail: 'Please, complete all fields correctly'
+      })
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.errorMessage = null;
+    const formValues = this.loginForm.value;
+
+    this.authService.login({
+      email: formValues.email,
+      password: formValues.password
+    }).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Login successful',
+          detail: 'Welcome! Redirecting...'
+        })
+        setTimeout(() => this.router.navigate(['/']), 1000);
+      },
+      error: (error) => {
+        this.errorMessage = error.message;
+        this.isSubmitting = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Login error',
+          detail: this.errorMessage || 'Unknown error'
+        })
+      },
+      complete: () => this.isSubmitting = false
+    })
   }
 
   get email() {
