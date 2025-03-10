@@ -94,7 +94,6 @@
               <input variant="outlined" pInputText id="name" name="name" formControlName="name"
                 class="w-full !p-4 !rounded-2xl" [pAutoFocus]="true"
                 [class]="{ 'ng-invalid': userForm.get('name')?.invalid && submitted }" />
-              <!-- [ngClass]="{'ng-invalid ng-dirty': name?.invalid && name?.touched}" -->
               <p-inputicon class="pi pi-user" />
             </p-float-label>
 
@@ -115,7 +114,6 @@
             optionValue="id" display="chip" [filter]="true" appendTo="body" styleClass="w-full !p-2 !rounded-2xl"
             [panelStyleClass]="'w-full !p-2 !rounded-2xl'"
             [class]="{ 'ng-invalid': userForm.get('pets')?.invalid && submitted }">
-            <!-- [ngClass]="{'ng-invalid ng-dirty': pets?.invalid && pets?.touched}" -->
             <ng-template let-pet #item>
               <div class="flex items-center gap-2">
                 <div>{{ pet.name }}</div>
