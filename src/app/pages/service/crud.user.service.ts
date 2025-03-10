@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { User, UserResponse } from '@shared/models/user.model';
+import { User, UserResponse, UserUpdateResponse } from '@shared/models/user.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -23,8 +23,8 @@ export class CrudUserService {
     return this.http.post<User>(`${this.apiUrl}/users`, user);
   }
 
-  updateUser(user: User): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/users/${user.id}`, user);
+  updateUser(user: User): Observable<UserUpdateResponse> {
+    return this.http.put<UserUpdateResponse>(`${this.apiUrl}/users/${user.id}`, user);
   }
 
   deleteUser(id?: number): Observable<any> {

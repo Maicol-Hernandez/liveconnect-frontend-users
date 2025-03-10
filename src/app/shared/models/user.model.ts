@@ -26,3 +26,8 @@ export interface UserResponse {
   data: User[]
   success: string
 }
+
+export interface UserUpdateResponse {
+  data: User
+  success: string
+}

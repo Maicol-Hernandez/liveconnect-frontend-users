@@ -26,7 +26,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { CrudUserService } from '../../service/crud.user.service'
 import { PetService } from '../../service/pet.service';
-import { User } from '@shared/models/user.model';
+import { User, UserUpdateResponse } from '@shared/models/user.model';
 import { Pet } from '@shared/models/pet.model';
 import { PetsFormatterPipe } from '@shared/pipes/pets-formatter.pipe';
 
@@ -228,69 +228,16 @@ export class CrudUsers implements OnInit {
 
     const formData = {
       ...this.userForm.value,
-      ...this.user
+      id: this.user.id
     }
 
-    if (formData.id) {
-      this.crudUserService.updateUser(this.user).subscribe({
-        next: (updatedUser) => {
-          this.updateUserList(updatedUser);
-          this.showSuccessMessage('User Updated');
-        },
-        error: this.handleError('update')
-      });
-    }
-
-    // if (this.user.name?.trim()) {
-    //   if (this.user.id) {
-    //     this.crudUserService.updateUser(this.user).subscribe({
-    //       next: () => {
-    //         this.users.update(users => {
-    //           const index = users.findIndex(u => u.id === this.user.id);
-    //           users[index] = this.user;
-    //           return [...users];
-    //         });
-    //         this.messageService.add({
-    //           severity: 'success',
-    //           summary: 'Successful',
-    //           detail: 'User Updated',
-    //           life: 3000
-    //         });
-    //       },
-    //       error: (error) => {
-    //         console.error('Error updating user:', error);
-    //         this.messageService.add({
-    //           severity: 'error',
-    //           summary: 'Error',
-    //           detail: 'Unable to update user',
-    //           life: 3000
-    //         });
-    //       }
-    //     });
-    //   } else {
-    //     this.crudUserService.createUser(this.user).subscribe({
-    //       next: (newUser) => {
-    //         this.users.update(users => [...users, newUser]);
-    //         this.messageService.add({
-    //           severity: 'success',
-    //           summary: 'Successful',
-    //           detail: 'User Created',
-    //           life: 3000
-    //         });
-    //       },
-    //       error: (error) => {
-    //         console.error('Error creating user:', error);
-    //         this.messageService.add({
-    //           severity: 'error',
-    //           summary: 'Error',
-    //           detail: 'Unable to create user',
-    //           life: 3000
-    //         });
-    //       }
-    //     });
-    //   }
-    //   this.user = {};
-    // }
+    this.crudUserService.updateUser(formData).subscribe({
+      next: (updatedUser: UserUpdateResponse) => {
+        this.updateUserList(updatedUser.data);
+        this.showSuccessMessage('User Updated');
+      },
+      error: this.handleError('update')
+    });
 
     this.userDialog = false;
   }
@@ -299,12 +246,6 @@ export class CrudUsers implements OnInit {
     this.users.update(users =>
       users.map(u => u.id === updatedUser.id ? updatedUser : u)
     )
-
-    // this.users.update(users => {
-    //   const index = users.findIndex(u => u.id === this.user.id);
-    //   users[index] = this.user;
-    //   return [...users];
-    // });
   }
 
   private showSuccessMessage(detail: string): void {
