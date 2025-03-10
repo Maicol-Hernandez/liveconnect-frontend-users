@@ -10,7 +10,12 @@ export const appRoutes: Routes = [
     component: AppLayout,
     canActivate: [authGuard],
     children: [
-      { path: '', component: Dashboard },
+      {
+        path: '',
+        // component: Dashboard,
+        redirectTo: '/pages/users',
+        pathMatch: 'full'
+      },
       {
         path: 'pages',
         loadChildren: () => import('./app/pages/pages.routes')
