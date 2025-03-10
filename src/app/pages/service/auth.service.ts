@@ -8,11 +8,12 @@ import { Router } from '@angular/router';
 export interface User {
   id?: number;
   name?: string;
-  email: string;
+  email?: string;
   password?: string;
   password_confirm?: string;
   pets?: string[];
   token?: string;
+  created_at?: string;
   updated_at?: string;
 }
 

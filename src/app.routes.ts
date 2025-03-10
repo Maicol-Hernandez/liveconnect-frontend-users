@@ -11,7 +11,10 @@ export const appRoutes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: '', component: Dashboard },
-      { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
+      {
+        path: 'pages',
+        loadChildren: () => import('./app/pages/pages.routes')
+      }
     ]
   },
   { path: 'notfound', component: Notfound },
