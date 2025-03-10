@@ -113,7 +113,7 @@ export class AuthService {
         localStorage.removeItem(this.userKey);
         this.currentUserSubject.next(null);
         this.isAuthenticatedSubject.next(false);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
 
         return this.handleError(error);
       })
