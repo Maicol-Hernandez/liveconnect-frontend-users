@@ -22,9 +22,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Message } from 'primeng/message';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
-import { User } from '../../service/auth.service';
 import { CrudUserService } from '../../service/crud.user.service'
 import { PetService } from '../../service/pet.service';
+import { User } from '@shared/models/user.model';
 import { Pet } from '@shared/models/pet.model';
 
 interface Column {

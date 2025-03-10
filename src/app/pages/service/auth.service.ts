@@ -5,28 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { Pet } from '@shared/models/pet.model';
-
-export interface User {
-  id?: number;
-  name?: string;
-  email?: string;
-  password?: string;
-  password_confirm?: string;
-  pets?: Pet[];
-  token?: string;
-  created_at?: string;
-  updated_at?: string;
-}
-
-export interface Login {
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  data: User;
-  status: string;
-}
+import { User, AuthResponse, Login } from '@shared/models/user.model';
 
 @Injectable({
   providedIn: 'root'
