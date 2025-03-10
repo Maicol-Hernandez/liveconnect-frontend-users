@@ -18,6 +18,7 @@ import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { MultiSelectModule } from 'primeng/multiselect'
 import { IconFieldModule } from 'primeng/iconfield';
+import { ChipModule } from 'primeng/chip';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Message } from 'primeng/message';
@@ -28,7 +29,7 @@ import { CrudUserService } from '../../service/crud.user.service'
 import { PetService } from '../../service/pet.service';
 import { User, UserUpdateResponse } from '@shared/models/user.model';
 import { Pet } from '@shared/models/pet.model';
-import { PetsFormatterPipe } from '@shared/pipes/pets-formatter.pipe';
+// import { PetsFormatterPipe } from '@shared/pipes/pets-formatter.pipe';
 
 interface Column {
   field: string;
@@ -64,11 +65,12 @@ interface ExportColumn {
     InputIconModule,
     MultiSelectModule,
     IconFieldModule,
+    ChipModule,
     FloatLabelModule,
     ConfirmDialogModule,
     Message,
-    AutoFocusModule,
-    PetsFormatterPipe
+    AutoFocusModule
+    // PetsFormatterPipe
   ],
   providers: [ConfirmationService, MessageService, CrudUserService]
 })
