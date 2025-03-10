@@ -83,60 +83,98 @@
 
 <p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" header="User Details" [modal]="true">
   <ng-template #content>
-    <div class="flex flex-col gap-6">
+    <form [formGroup]="userForm">
+      <div class="flex flex-col gap-6 p-4">
 
-      <!-- Username field-->
-      <!-- <div class="mb-8">
-        <p-icon-field>
-          <p-float-label variant="on" class="w-full">
-            <label for="name">Username</label>
-            <input variant="outlined" pInputText id="name" name="name" formControlName="name"
-              class="w-full md:w-[30rem] !p-4 !rounded-2xl" [pAutoFocus]="true"
-              [ngClass]="{'ng-invalid ng-dirty': name?.invalid && name?.touched}" />
-            <p-inputicon class="pi pi-user" />
-          </p-float-label>
+        <!-- Name Field -->
+        <!-- <div class="field">
+          <label for="name" class="block font-medium mb-2">Name</label>
+          <input pInputText id="name" formControlName="name"
+            [class]="{ 'ng-invalid': userForm.get('name')?.invalid && submitted }" />
+          <small *ngIf="userForm.get('name')?.hasError('required') && submitted" class="p-error block mt-1">
+            Name is required
+          </small>
+          <small *ngIf="userForm.get('name')?.hasError('minlength') && submitted" class="p-error block mt-1">
+            Minimum 3 characters required
+          </small>
+        </div> -->
 
-          <div class="w-full md:w-[30rem] mt-2">
-            <p-message *ngIf="name?.invalid && name?.touched" severity="error" variant="simple" styleClass="w-full">
-              <div class="w-full break-words">
-                {{ name?.errors?.['required'] ? 'Username is required' :
+        <!-- Username field-->
+        <div class="mb-4">
+          <p-icon-field>
+            <p-float-label variant="on" class="w-full">
+              <label for="name">Username</label>
+              <input variant="outlined" pInputText id="name" name="name" formControlName="name"
+                class="w-full !p-4 !rounded-2xl" [pAutoFocus]="true"
+                [class]="{ 'ng-invalid': userForm.get('name')?.invalid && submitted }" />
+              <!-- [ngClass]="{'ng-invalid ng-dirty': name?.invalid && name?.touched}" -->
+              <p-inputicon class="pi pi-user" />
+            </p-float-label>
+
+            <div class="w-full mt-2">
+              <p-message *ngIf="name?.invalid && name?.touched" severity="error" variant="simple" styleClass="w-full">
+                <div class="w-full break-words">
+                  {{ name?.errors?.['required'] ? 'Username is required' :
                     name?.errors?.['minlength'] ? 'Minimum 3 characters required' : '' }}
+                </div>
+              </p-message>
+            </div>
+          </p-icon-field>
+        </div>
+
+        <!-- Pets field -->
+        <div class="mb-4">
+          <p-multiselect [options]="dataPets" formControlName="pets" placeholder="Select Pets" optionLabel="name"
+            optionValue="id" display="chip" [filter]="true" appendTo="body" styleClass="w-full !p-2 !rounded-2xl"
+            [panelStyleClass]="'w-full !p-2 !rounded-2xl'"
+            [class]="{ 'ng-invalid': userForm.get('pets')?.invalid && submitted }">
+            <!-- [ngClass]="{'ng-invalid ng-dirty': pets?.invalid && pets?.touched}" -->
+            <ng-template let-pet #item>
+              <div class="flex items-center gap-2">
+                <div>{{ pet.name }}</div>
+              </div>
+            </ng-template>
+            <ng-template #dropdownicon>
+              <i class="pi pi-chevron-down"></i>
+            </ng-template>
+          </p-multiselect>
+          <div class="w-full mt-2">
+            <p-message *ngIf="pets?.invalid && pets?.touched" severity="error" variant="simple" styleClass="w-full">
+              <div class="w-full break-words">
+                {{ pets?.errors?.['required'] ? 'Pets is required' : '' }}
               </div>
             </p-message>
           </div>
-        </p-icon-field>
-      </div> -->
-
-
-      <!-- Pets field -->
-      <!-- <div class="w-full mb-8">
-        <p-multiselect [options]="dataPets" formControlName="pets" placeholder="Select Pets" optionLabel="name"
-          styleClass="w-full !p-2 !rounded-2xl" display="chip"
-          [ngClass]="{'ng-invalid ng-dirty': pets?.invalid && pets?.touched}">
-          <ng-template let-pet #item>
-            <div class="flex items-center gap-2">
-              <div>{{ pet.name }}</div>
-            </div>
-          </ng-template>
-          <ng-template #dropdownicon>
-            <i class="pi pi-chevron-down"></i>
-          </ng-template>
-        </p-multiselect>
-        <div class="w-full md:w-[30rem] mt-2">
-          <p-message *ngIf="pets?.invalid && pets?.touched" severity="error" variant="simple" styleClass="w-full">
-            <div class="w-full break-words">
-              {{ pets?.errors?.['required'] ? 'Pets is required' : '' }}
-            </div>
-          </p-message>
         </div>
-      </div> -->
 
-    </div>
+        <!-- Pets Field -->
+        <!-- <div class="field">
+          <label for="pets" class="block font-medium mb-2">Pets</label>
+          <p-multiSelect id="pets" formControlName="pets" [options]="dataPets" optionLabel="name" optionValue="id"
+            placeholder="Select Pets" [showToggleAll]="false"
+            [class]="{ 'ng-invalid': userForm.get('pets')?.invalid && submitted }">
+            <ng-template let-pet #item>
+              <div class="flex items-center gap-2">
+                <span>{{ pet.name }}</span>
+              </div>
+            </ng-template>
+          </p-multiSelect>
+          <small *ngIf="userForm.get('pets')?.hasError('required') && submitted" class="p-error block mt-1">
+            At least one pet is required
+          </small>
+        </div> -->
+
+      </div>
+    </form>
   </ng-template>
 
   <ng-template #footer>
-    <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
-    <p-button label="Save" icon="pi pi-check" (click)="saveUser()" />
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="hideDialog()"></p-button>
+      <p-button label="Save" icon="pi pi-check" (click)="saveUser()"
+        [disabled]="userForm.invalid && submitted"></p-button>
+      <!-- userForm.invalid -->
+    </div>
   </ng-template>
 </p-dialog>
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormGroup, Validators, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Component, OnInit, signal, ViewChild } from '@angular/core';
 
 import { Table, TableModule } from 'primeng/table';
@@ -18,8 +18,10 @@ import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { MultiSelectModule } from 'primeng/multiselect'
 import { IconFieldModule } from 'primeng/iconfield';
+import { FloatLabelModule } from 'primeng/floatlabel';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Message } from 'primeng/message';
+import { AutoFocusModule } from 'primeng/autofocus';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { CrudUserService } from '../../service/crud.user.service'
@@ -44,6 +46,7 @@ interface ExportColumn {
   templateUrl: './crud.users.html',
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     FormsModule,
     TableModule,
     ButtonModule,
@@ -61,8 +64,10 @@ interface ExportColumn {
     InputIconModule,
     MultiSelectModule,
     IconFieldModule,
+    FloatLabelModule,
     ConfirmDialogModule,
     Message,
+    AutoFocusModule,
     PetsFormatterPipe
   ],
   providers: [ConfirmationService, MessageService, CrudUserService]
@@ -90,12 +95,22 @@ export class CrudUsers implements OnInit {
 
   selectedPets!: Pet[];
 
+  userForm: FormGroup
+
   constructor(
     private crudUserService: CrudUserService,
     private petService: PetService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
-  ) { }
+    private messageService: MessageService,
+    private fb: FormBuilder
+  ) {
+    this.userForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      // email: ['', Validators.required],
+      // password: ['', Validators.required],
+      pets: [[], [Validators.required]]
+    })
+  }
 
   exportCSV() {
     this.dt.exportCSV();
@@ -156,10 +171,15 @@ export class CrudUsers implements OnInit {
     this.user = {};
     this.submitted = false;
     this.userDialog = true;
+    this.userForm.reset();
   }
 
   editUser(user: User): void {
     this.user = { ...user };
+    this.userForm.patchValue({
+      name: user.name,
+      pets: user.pets?.map(p => p.id) || []
+    });
     this.userDialog = true;
   }
 
@@ -201,57 +221,119 @@ export class CrudUsers implements OnInit {
   saveUser() {
     this.submitted = true;
 
-    if (this.user.name?.trim()) {
-      if (this.user.id) {
-        this.crudUserService.updateUser(this.user).subscribe({
-          next: () => {
-            this.users.update(users => {
-              const index = users.findIndex(u => u.id === this.user.id);
-              users[index] = this.user;
-              return [...users];
-            });
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Successful',
-              detail: 'User Updated',
-              life: 3000
-            });
-          },
-          error: (error) => {
-            console.error('Error updating user:', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Unable to update user',
-              life: 3000
-            });
-          }
-        });
-      } else {
-        this.crudUserService.createUser(this.user).subscribe({
-          next: (newUser) => {
-            this.users.update(users => [...users, newUser]);
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Successful',
-              detail: 'User Created',
-              life: 3000
-            });
-          },
-          error: (error) => {
-            console.error('Error creating user:', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Unable to create user',
-              life: 3000
-            });
-          }
-        });
-      }
-
-      this.userDialog = false;
-      this.user = {};
+    if (this.userForm.invalid) {
+      this.userForm.markAllAsTouched();
+      return;
     }
+
+    const formData = {
+      ...this.userForm.value,
+      ...this.user
+    }
+
+    if (formData.id) {
+      this.crudUserService.updateUser(this.user).subscribe({
+        next: (updatedUser) => {
+          this.updateUserList(updatedUser);
+          this.showSuccessMessage('User Updated');
+        },
+        error: this.handleError('update')
+      });
+    }
+
+    // if (this.user.name?.trim()) {
+    //   if (this.user.id) {
+    //     this.crudUserService.updateUser(this.user).subscribe({
+    //       next: () => {
+    //         this.users.update(users => {
+    //           const index = users.findIndex(u => u.id === this.user.id);
+    //           users[index] = this.user;
+    //           return [...users];
+    //         });
+    //         this.messageService.add({
+    //           severity: 'success',
+    //           summary: 'Successful',
+    //           detail: 'User Updated',
+    //           life: 3000
+    //         });
+    //       },
+    //       error: (error) => {
+    //         console.error('Error updating user:', error);
+    //         this.messageService.add({
+    //           severity: 'error',
+    //           summary: 'Error',
+    //           detail: 'Unable to update user',
+    //           life: 3000
+    //         });
+    //       }
+    //     });
+    //   } else {
+    //     this.crudUserService.createUser(this.user).subscribe({
+    //       next: (newUser) => {
+    //         this.users.update(users => [...users, newUser]);
+    //         this.messageService.add({
+    //           severity: 'success',
+    //           summary: 'Successful',
+    //           detail: 'User Created',
+    //           life: 3000
+    //         });
+    //       },
+    //       error: (error) => {
+    //         console.error('Error creating user:', error);
+    //         this.messageService.add({
+    //           severity: 'error',
+    //           summary: 'Error',
+    //           detail: 'Unable to create user',
+    //           life: 3000
+    //         });
+    //       }
+    //     });
+    //   }
+    //   this.user = {};
+    // }
+
+    this.userDialog = false;
+  }
+
+  private updateUserList(updatedUser: User): void {
+    this.users.update(users =>
+      users.map(u => u.id === updatedUser.id ? updatedUser : u)
+    )
+
+    // this.users.update(users => {
+    //   const index = users.findIndex(u => u.id === this.user.id);
+    //   users[index] = this.user;
+    //   return [...users];
+    // });
+  }
+
+  private showSuccessMessage(detail: string): void {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: detail,
+      life: 3000
+    })
+  }
+
+  private handleError(action: string) {
+    return (error: any) => {
+      console.error(`Error ${action} user:`, error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `Unable to ${action} user`,
+        life: 3000
+      });
+    }
+  }
+
+
+  get name() {
+    return this.userForm.get('name');
+  }
+
+  get pets() {
+    return this.userForm.get('pets');
   }
 }
