@@ -56,7 +56,7 @@
       </td>
       <td style="min-width: 16rem">{{ user.name }}</td>
       <td style="min-width: 16rem">{{ user.email }}</td>
-      <td>{{ user.created_at }}</td>
+      <td style="min-width: 12rem">{{ user.created_at | date:'fullDate'}}</td>
       <td>
         <!-- <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editProduct(product)" /> -->
         <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteUser(user)" />
