@@ -2,7 +2,7 @@
 import { HttpInterceptorFn, HttpHandlerFn, HttpRequest, HttpEvent } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from '../../app/pages/service/auth.service';
+import { AuthService } from '../../pages/service/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
