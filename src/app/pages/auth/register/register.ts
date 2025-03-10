@@ -83,8 +83,19 @@ export class Register implements OnInit {
   }
 
   loadPets(): void {
-    this.petService.getPets().subscribe(({ data }: { data: Pet[] }) => {
-      this.dataPets = data;
+    this.petService.getPets().subscribe({
+      next: (response) => {
+        this.dataPets = response.data;
+      },
+      error: (error) => {
+        console.error('Error loading pets:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load pets',
+          life: 3000
+        })
+      }
     });
   }
 

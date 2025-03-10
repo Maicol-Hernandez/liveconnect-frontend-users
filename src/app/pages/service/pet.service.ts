@@ -9,6 +9,11 @@ export interface Pet {
   created_at: string;
 }
 
+export interface PetResponse {
+  data: Pet[];
+  success: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +22,7 @@ export class PetService {
 
   constructor(private http: HttpClient) { }
 
-  getPets(): Observable<any> {
-    return this.http.get<Pet[]>(this.apiUrl);
+  getPets(): Observable<PetResponse> {
+    return this.http.get<PetResponse>(this.apiUrl);
   }
 }
