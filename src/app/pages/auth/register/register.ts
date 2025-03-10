@@ -45,8 +45,8 @@ import { MessageService } from 'primeng/api';
 })
 export class Register implements OnInit {
   registerForm!: FormGroup;
-  isSubmitting = false;
-  errorMessage: string | null = null;
+  loading = false;
+  error: string | null = null;
   dataPets!: Pet[];
 
   constructor(
@@ -100,8 +100,8 @@ export class Register implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
-    this.errorMessage = null;
+    this.loading = true;
+    this.error = null;
     const formValues = this.registerForm.value;
 
     this.authService.register({
@@ -120,15 +120,15 @@ export class Register implements OnInit {
         setTimeout(() => this.router.navigate(['/']), 1000);
       },
       error: (error) => {
-        this.errorMessage = error.message;
-        this.isSubmitting = false;
+        this.error = error.message;
+        this.loading = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Registration error',
-          detail: this.errorMessage || 'Unknown error'
+          detail: this.error || 'Unknown error'
         });
       },
-      complete: () => this.isSubmitting = false
+      complete: () => this.loading = false
     });
   }
 
