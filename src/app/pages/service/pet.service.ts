@@ -2,17 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-
-export interface Pet {
-  id: number;
-  name: string;
-  created_at: string;
-}
-
-export interface PetResponse {
-  data: Pet[];
-  success: string;
-}
+import { Pet, PetResponse } from '@shared/models/pet.model';
 
 @Injectable({
   providedIn: 'root'

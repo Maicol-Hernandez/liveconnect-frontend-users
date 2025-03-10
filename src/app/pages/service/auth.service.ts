@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { Pet } from './pet.service';
+import { Pet } from '@shared/models/pet.model';
 
 export interface User {
   id?: number;

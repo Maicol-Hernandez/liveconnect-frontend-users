@@ -4,7 +4,8 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { AuthService } from '../../service/auth.service';
-import { PetService, Pet } from '../../service/pet.service';
+import { PetService } from '../../service/pet.service';
+import { Pet } from '@shared/models/pet.model';
 
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';

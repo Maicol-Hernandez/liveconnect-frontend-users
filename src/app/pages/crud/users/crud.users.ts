@@ -17,16 +17,15 @@ import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { MultiSelectModule } from 'primeng/multiselect'
-
 import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Message } from 'primeng/message';
-
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { User } from '../../service/auth.service';
 import { CrudUserService } from '../../service/crud.user.service'
-import { PetService, Pet } from '../../service/pet.service';
+import { PetService } from '../../service/pet.service';
+import { Pet } from '@shared/models/pet.model';
 
 interface Column {
   field: string;
