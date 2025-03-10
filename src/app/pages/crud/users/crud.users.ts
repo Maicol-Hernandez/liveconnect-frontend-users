@@ -16,13 +16,17 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
+import { MultiSelectModule } from 'primeng/multiselect'
+
 import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { Message } from 'primeng/message';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { User } from '../../service/auth.service';
 import { CrudUserService } from '../../service/crud.user.service'
+import { PetService, Pet } from '../../service/pet.service';
 
 interface Column {
   field: string;
@@ -55,8 +59,10 @@ interface ExportColumn {
     DialogModule,
     TagModule,
     InputIconModule,
+    MultiSelectModule,
     IconFieldModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    Message
   ],
   providers: [ConfirmationService, MessageService, CrudUserService]
 })
@@ -79,8 +85,13 @@ export class CrudUsers implements OnInit {
 
   cols!: Column[];
 
+  dataPets!: Pet[];
+
+  selectedPets!: Pet[];
+
   constructor(
     private crudUserService: CrudUserService,
+    private petService: PetService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService
   ) { }
@@ -91,6 +102,24 @@ export class CrudUsers implements OnInit {
 
   ngOnInit(): void {
     this.loadUsers();
+    this.loadPets();
+  }
+
+  loadPets(): void {
+    this.petService.getPets().subscribe({
+      next: (response) => {
+        this.dataPets = response.data;
+      },
+      error: (error) => {
+        console.error('Error loading pets:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load pets',
+          life: 3000
+        })
+      }
+    });
   }
 
   loadUsers(): void {
@@ -128,6 +157,16 @@ export class CrudUsers implements OnInit {
     this.userDialog = true;
   }
 
+  editUser(user: User): void {
+    this.user = { ...user };
+    this.userDialog = true;
+  }
+
+  hideDialog() {
+    this.userDialog = false;
+    this.submitted = false;
+  }
+
   deleteUser(user: User): void {
     this.confirmationService.confirm({
       message: `Are you sure you want to delete the user ${user.name || user.email}?`,
@@ -156,5 +195,62 @@ export class CrudUsers implements OnInit {
         });
       }
     });
+  }
+
+  saveUser() {
+    this.submitted = true;
+
+    if (this.user.name?.trim()) {
+      if (this.user.id) {
+        this.crudUserService.updateUser(this.user).subscribe({
+          next: () => {
+            this.users.update(users => {
+              const index = users.findIndex(u => u.id === this.user.id);
+              users[index] = this.user;
+              return [...users];
+            });
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Successful',
+              detail: 'User Updated',
+              life: 3000
+            });
+          },
+          error: (error) => {
+            console.error('Error updating user:', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Unable to update user',
+              life: 3000
+            });
+          }
+        });
+      } else {
+        this.crudUserService.createUser(this.user).subscribe({
+          next: (newUser) => {
+            this.users.update(users => [...users, newUser]);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Successful',
+              detail: 'User Created',
+              life: 3000
+            });
+          },
+          error: (error) => {
+            console.error('Error creating user:', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Unable to create user',
+              life: 3000
+            });
+          }
+        });
+      }
+
+      this.userDialog = false;
+      this.user = {};
+    }
   }
 }

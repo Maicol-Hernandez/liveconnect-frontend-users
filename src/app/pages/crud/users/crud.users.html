@@ -56,7 +56,7 @@
       <td style="min-width: 16rem">{{ user.email }}</td>
       <td style="min-width: 12rem">{{ user.created_at | date:'fullDate'}}</td>
       <td>
-        <!-- <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editProduct(product)" /> -->
+        <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editUser(user)" />
         <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteUser(user)" />
       </td>
     </tr>
@@ -71,68 +71,64 @@
   </ng-template>
 </p-table>
 
-<!-- <p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" header="Product Details" [modal]="true">
+<p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" header="User Details" [modal]="true">
   <ng-template #content>
     <div class="flex flex-col gap-6">
-      <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image"
-        class="block m-auto pb-4" *ngIf="product.image" />
-      <div>
-        <label for="name" class="block font-bold mb-3">Name</label>
-        <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus fluid />
-        <small class="text-red-500" *ngIf="submitted && !product.name">Name is required.</small>
-      </div>
-      <div>
-        <label for="description" class="block font-bold mb-3">Description</label>
-        <textarea id="description" pTextarea [(ngModel)]="product.description" required rows="3" cols="20"
-          fluid></textarea>
-      </div>
 
-      <div>
-        <label for="inventoryStatus" class="block font-bold mb-3">Inventory Status</label>
-        <p-select [(ngModel)]="product.inventoryStatus" inputId="inventoryStatus" [options]="statuses"
-          optionLabel="label" optionValue="label" placeholder="Select a Status" fluid />
-      </div>
+      <!-- Username field-->
+      <!-- <div class="mb-8">
+        <p-icon-field>
+          <p-float-label variant="on" class="w-full">
+            <label for="name">Username</label>
+            <input variant="outlined" pInputText id="name" name="name" formControlName="name"
+              class="w-full md:w-[30rem] !p-4 !rounded-2xl" [pAutoFocus]="true"
+              [ngClass]="{'ng-invalid ng-dirty': name?.invalid && name?.touched}" />
+            <p-inputicon class="pi pi-user" />
+          </p-float-label>
 
-      <div>
-        <span class="block font-bold mb-4">Category</span>
-        <div class="grid grid-cols-12 gap-4">
-          <div class="flex items-center gap-2 col-span-6">
-            <p-radiobutton id="category1" name="category" value="Accessories" [(ngModel)]="product.category" />
-            <label for="category1">Accessories</label>
+          <div class="w-full md:w-[30rem] mt-2">
+            <p-message *ngIf="name?.invalid && name?.touched" severity="error" variant="simple" styleClass="w-full">
+              <div class="w-full break-words">
+                {{ name?.errors?.['required'] ? 'Username is required' :
+                    name?.errors?.['minlength'] ? 'Minimum 3 characters required' : '' }}
+              </div>
+            </p-message>
           </div>
-          <div class="flex items-center gap-2 col-span-6">
-            <p-radiobutton id="category2" name="category" value="Clothing" [(ngModel)]="product.category" />
-            <label for="category2">Clothing</label>
-          </div>
-          <div class="flex items-center gap-2 col-span-6">
-            <p-radiobutton id="category3" name="category" value="Electronics" [(ngModel)]="product.category" />
-            <label for="category3">Electronics</label>
-          </div>
-          <div class="flex items-center gap-2 col-span-6">
-            <p-radiobutton id="category4" name="category" value="Fitness" [(ngModel)]="product.category" />
-            <label for="category4">Fitness</label>
-          </div>
-        </div>
-      </div>
+        </p-icon-field>
+      </div> -->
 
-      <div class="grid grid-cols-12 gap-4">
-        <div class="col-span-6">
-          <label for="price" class="block font-bold mb-3">Price</label>
-          <p-inputnumber id="price" [(ngModel)]="product.price" mode="currency" currency="USD" locale="en-US" fluid />
+
+      <!-- Pets field -->
+      <!-- <div class="w-full mb-8">
+        <p-multiselect [options]="dataPets" formControlName="pets" placeholder="Select Pets" optionLabel="name"
+          styleClass="w-full !p-2 !rounded-2xl" display="chip"
+          [ngClass]="{'ng-invalid ng-dirty': pets?.invalid && pets?.touched}">
+          <ng-template let-pet #item>
+            <div class="flex items-center gap-2">
+              <div>{{ pet.name }}</div>
+            </div>
+          </ng-template>
+          <ng-template #dropdownicon>
+            <i class="pi pi-chevron-down"></i>
+          </ng-template>
+        </p-multiselect>
+        <div class="w-full md:w-[30rem] mt-2">
+          <p-message *ngIf="pets?.invalid && pets?.touched" severity="error" variant="simple" styleClass="w-full">
+            <div class="w-full break-words">
+              {{ pets?.errors?.['required'] ? 'Pets is required' : '' }}
+            </div>
+          </p-message>
         </div>
-        <div class="col-span-6">
-          <label for="quantity" class="block font-bold mb-3">Quantity</label>
-          <p-inputnumber id="quantity" [(ngModel)]="product.quantity" fluid />
-        </div>
-      </div>
+      </div> -->
+
     </div>
   </ng-template>
 
   <ng-template #footer>
     <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
-    <p-button label="Save" icon="pi pi-check" (click)="saveProduct()" />
+    <p-button label="Save" icon="pi pi-check" (click)="saveUser()" />
   </ng-template>
-</p-dialog> -->
+</p-dialog>
 
 <p-toast></p-toast>
 <p-confirmdialog [style]="{ width: '450px' }" />

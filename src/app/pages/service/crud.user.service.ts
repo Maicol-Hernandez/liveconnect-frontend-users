@@ -24,6 +24,14 @@ export class CrudUserService {
     return this.http.get<UserResponse>(`${this.apiUrl}/users`);
   }
 
+  createUser(user: User): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/users`, user);
+  }
+
+  updateUser(user: User): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/users/${user.id}`, user);
+  }
+
   deleteUser(id?: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/users/${id}`);
   }
