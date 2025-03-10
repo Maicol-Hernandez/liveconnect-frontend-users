@@ -110,7 +110,7 @@ export class Login implements OnInit {
           summary: 'Login successful',
           detail: 'Welcome! Redirecting...'
         })
-        setTimeout(() => this.router.navigate(['/']), 1000);
+        setTimeout(() => this.router.navigate(['/']), 2000);
       },
       error: (error) => {
         this.error = error;
