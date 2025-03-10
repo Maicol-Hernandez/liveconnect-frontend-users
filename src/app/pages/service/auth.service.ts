@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { Pet } from './pet.service';
 
 export interface User {
   id?: number;
@@ -11,7 +12,7 @@ export interface User {
   email?: string;
   password?: string;
   password_confirm?: string;
-  pets?: string[];
+  pets?: Pet[];
   token?: string;
   created_at?: string;
   updated_at?: string;
