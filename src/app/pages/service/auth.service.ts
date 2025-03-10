@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
 import { Router } from '@angular/router';
 
 export interface User {
@@ -34,6 +34,7 @@ export class AuthService {
   private apiUrl = `${environment.apiUrl}/api/v1`;
   private tokenKey = 'auth_token';
   private userKey = 'auth_user';
+  private isLoggingOut: boolean = false;
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
@@ -100,6 +101,21 @@ export class AuthService {
    * Log out the current user
    */
   logout(): Observable<any> {
+    if (this.isLoggingOut) {
+      return of(null);
+    }
+
+    this.isLoggingOut = true;
+
+    if (!this.getToken()) {
+      localStorage.removeItem(this.userKey);
+      this.currentUserSubject.next(null);
+      this.isAuthenticatedSubject.next(false);
+      this.router.navigate(['/auth/login']);
+      this.isLoggingOut = false;
+      return of(null);
+    }
+
     // First call the logout endpoint if the API requires it
     return this.http.post(`${this.apiUrl}/logout`, {}).pipe(
       tap(() => {
@@ -111,6 +127,8 @@ export class AuthService {
         this.currentUserSubject.next(null);
         this.isAuthenticatedSubject.next(false);
 
+        this.isLoggingOut = false;
+
         // Navigate to the login page
         this.router.navigate(['/auth/login']);
       }),
@@ -121,6 +139,8 @@ export class AuthService {
         this.currentUserSubject.next(null);
         this.isAuthenticatedSubject.next(false);
         this.router.navigate(['/auth/login']);
+
+        this.isLoggingOut = false;
 
         return this.handleError(error);
       })
