@@ -56,7 +56,7 @@
           <!-- Password field -->
           <div class="mb-8">
             <p-float-label variant="on" class="w-full">
-              <p-password formControlName="password" [toggleMask]="true" [feedback]="false"
+              <p-password formControlName="password" [toggleMask]="true" [feedback]="false" styleClass="w-full"
                 inputStyleClass="w-full md:w-[30rem] !p-4 !rounded-2xl" autocomplete
                 [ngClass]="{'ng-invalid ng-dirty': password?.invalid && password?.touched}">
               </p-password>
@@ -78,7 +78,7 @@
           <!-- Confirm Password field -->
           <div class="mb-8">
             <p-float-label variant="on" class="w-full">
-              <p-password formControlName="confirmPassword" [toggleMask]="true" [feedback]="false"
+              <p-password formControlName="confirmPassword" [toggleMask]="true" [feedback]="false" styleClass="w-full"
                 inputStyleClass="w-full md:w-[30rem] !p-4 !rounded-2xl" autocomplete
                 [ngClass]="{'ng-invalid ng-dirty': confirmPassword?.invalid && confirmPassword?.touched}">
               </p-password>
