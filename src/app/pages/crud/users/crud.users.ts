@@ -130,8 +130,8 @@ export class CrudUsers implements OnInit {
 
   deleteUser(user: User): void {
     this.confirmationService.confirm({
-      message: `¿Estás seguro que deseas eliminar al usuario ${user.name || user.email}?`,
-      header: 'Confirmar eliminación',
+      message: `Are you sure you want to delete the user ${user.name || user.email}?`,
+      header: 'Confirm deletion',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.crudUserService.deleteUser(user.id).subscribe({
@@ -139,8 +139,8 @@ export class CrudUsers implements OnInit {
             this.users.update(value => value.filter(val => val.id !== user.id));
             this.messageService.add({
               severity: 'success',
-              summary: 'Éxito',
-              detail: 'Usuario eliminado',
+              summary: 'Success',
+              detail: 'User deleted',
               life: 3000
             });
           },
@@ -149,7 +149,7 @@ export class CrudUsers implements OnInit {
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: 'No se pudo eliminar el usuario',
+              detail: 'Unable to delete user',
               life: 3000
             });
           }
